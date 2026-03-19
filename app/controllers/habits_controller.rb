@@ -8,7 +8,7 @@ class HabitsController < ApplicationController
     @selected_status = params[:status].to_s
 
     habits = current_user.habits.order(created_at: :desc)
-    @categories = current_user.habits.where.not(category: [nil, ""]).distinct.order(:category).pluck(:category)
+    @categories = current_user.habits.where.not(category: [ nil, "" ]).distinct.order(:category).pluck(:category)
 
     habits = habits.where(category: @selected_category) if @selected_category.present?
     habits = habits.where(priority: @selected_priority) if Habit::PRIORITIES.include?(@selected_priority)
@@ -28,7 +28,7 @@ class HabitsController < ApplicationController
 
     @per_page = 9
     @total_count = habits.count
-    @total_pages = [(@total_count.to_f / @per_page).ceil, 1].max
+    @total_pages = [ (@total_count.to_f / @per_page).ceil, 1 ].max
 
     requested_page = params[:page].to_i
     @current_page = requested_page.positive? ? requested_page : 1
@@ -38,7 +38,7 @@ class HabitsController < ApplicationController
     @habits = habits.offset(offset).limit(@per_page)
 
     @page_from = @total_count.zero? ? 0 : offset + 1
-    @page_to = [offset + @per_page, @total_count].min
+    @page_to = [ offset + @per_page, @total_count ].min
   end
 
   def show
