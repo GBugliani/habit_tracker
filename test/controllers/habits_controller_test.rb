@@ -1,23 +1,31 @@
 require "test_helper"
 
 class HabitsControllerTest < ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
+
+  setup do
+    @user = users(:one)
+    @habit = habits(:one)
+    sign_in @user
+  end
+
   test "should get index" do
-    get habits_index_url
+    get habits_url
     assert_response :success
   end
 
   test "should get show" do
-    get habits_show_url
+    get habit_url(@habit)
     assert_response :success
   end
 
   test "should get new" do
-    get habits_new_url
+    get new_habit_url
     assert_response :success
   end
 
   test "should get edit" do
-    get habits_edit_url
+    get edit_habit_url(@habit)
     assert_response :success
   end
 end

@@ -1,11 +1,11 @@
 one:
-	name: Usuario Um
-	age: 28
-	email: user_one@example.com
-	encrypted_password: <SECRET>
+  name: Usuario Um
+  age: 28
+  email: user_one@example.com
+  encrypted_password: <SECRET>
 
 two:
-	name: Usuario Dois
-	age: 34
-	email: user_two@example.com
-	encrypted_password: <SECRET>
+  name: Usuario Dois
+  age: 34
+  email: user_two@example.com
+  encrypted_password: <SECRET>
