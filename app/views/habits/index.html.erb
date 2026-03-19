@@ -1,0 +1,144 @@
+<section class="page-header">
+  <div>
+    <h1 class="page-title">Meus Hábitos</h1>
+    <p class="text-muted mb-0">Acompanhe sua consistência diária de forma simples.</p>
+  </div>
+  <%= link_to "Novo Hábito", new_habit_path, class: "btn btn-primary px-4" %>
+</section>
+
+<section class="surface-card habit-filters">
+  <%= form_with url: habits_path, method: :get, local: true, class: "habit-filters__form row g-3 align-items-end" do %>
+    <div class="col-12 col-md-4">
+      <label for="category" class="form-label fw-semibold mb-1">Categoria</label>
+      <%= select_tag :category,
+          options_for_select([["Todas", ""]] + @categories.map { |category| [category, category] }, @selected_category),
+          class: "form-select" %>
+    </div>
+
+    <div class="col-12 col-md-3">
+      <label for="priority" class="form-label fw-semibold mb-1">Prioridade</label>
+      <%= select_tag :priority,
+          options_for_select([["Todas", ""]] + Habit::PRIORITIES.map { |value| [value.capitalize, value] }, @selected_priority),
+          class: "form-select" %>
+    </div>
+
+    <div class="col-12 col-md-3">
+      <label for="status" class="form-label fw-semibold mb-1">Status</label>
+      <%= select_tag :status,
+          options_for_select([["Todos", ""], ["Ativo", "active"], ["Pausado", "paused"]], @selected_status),
+          class: "form-select" %>
+    </div>
+
+    <div class="col-12 col-md-2">
+      <div class="habit-filters__actions">
+        <%= submit_tag "Filtrar", class: "btn btn-primary" %>
+        <%= link_to "Limpar", habits_path, class: "btn btn-outline-secondary" %>
+      </div>
+    </div>
+  <% end %>
+</section>
+
+<% filters_active = @selected_category.present? || @selected_priority.present? || @selected_status.present? %>
+
+<section class="habit-results-summary">
+  <div>
+    <% if @total_count.positive? %>
+      Exibindo <strong><%= @page_from %></strong> a <strong><%= @page_to %></strong> de
+      <strong><%= @total_count %></strong> habito<%= @total_count == 1 ? "" : "s" %>
+    <% else %>
+      Nenhum habito encontrado.
+    <% end %>
+  </div>
+  <% if filters_active %>
+    <span class="habit-results-summary__flag">Filtros ativos</span>
+  <% end %>
+</section>
+
+<% if @habits.any? %>
+  <div class="row g-4">
+    <% @habits.each do |habit| %>
+      <div class="col-12 col-md-6 col-xl-4">
+        <article class="card surface-card habit-card">
+          <div class="card-body p-4 d-flex flex-column gap-3">
+            <div>
+              <h5 class="card-title mb-2"><%= habit.name %></h5>
+              <p class="card-text text-muted habit-description mb-0"><%= habit.description.presence || "Sem descrição por enquanto." %></p>
+            </div>
+
+            <div class="habit-meta-row">
+              <% if habit.category.present? %>
+                <span class="habit-meta-pill"><%= habit.category %></span>
+              <% end %>
+              <span class="habit-meta-pill"><%= habit.frequency_per_week %>x/semana</span>
+              <span class="habit-meta-pill">Prioridade: <%= habit.priority_label %></span>
+              <% if habit.reminder_time.present? %>
+                <span class="habit-meta-pill"><%= habit.reminder_time_label %></span>
+              <% end %>
+              <% unless habit.active? %>
+                <span class="habit-meta-pill habit-meta-pill--inactive">Pausado</span>
+              <% end %>
+            </div>
+
+            <div class="habit-streak-box">
+              <span class="habit-streak-box__label">Sequencia atual</span>
+              <strong><%= habit.streak %> dia<%= habit.streak == 1 ? "" : "s" %></strong>
+            </div>
+
+            <div class="mt-auto action-row">
+              <%= link_to "Ver detalhes", habit, class: "btn btn-outline-primary btn-sm" %>
+              <%= link_to "Editar", edit_habit_path(habit), class: "btn btn-outline-secondary btn-sm" %>
+            </div>
+          </div>
+        </article>
+      </div>
+    <% end %>
+  </div>
+
+  <% if @total_pages > 1 %>
+    <% page_start = [@current_page - 2, 1].max %>
+    <% page_end = [page_start + 4, @total_pages].min %>
+    <% page_start = [page_end - 4, 1].max %>
+
+    <nav class="habit-pagination" aria-label="Paginacao de habitos">
+      <ul class="pagination mb-0">
+        <li class="page-item <%= 'disabled' if @current_page == 1 %>">
+          <% if @current_page == 1 %>
+            <span class="page-link">Anterior</span>
+          <% else %>
+            <%= link_to "Anterior", habits_path(@pagination_params.merge(page: @current_page - 1)), class: "page-link" %>
+          <% end %>
+        </li>
+
+        <% (page_start..page_end).each do |page_number| %>
+          <li class="page-item <%= 'active' if page_number == @current_page %>">
+            <% if page_number == @current_page %>
+              <span class="page-link"><%= page_number %></span>
+            <% else %>
+              <%= link_to page_number, habits_path(@pagination_params.merge(page: page_number)), class: "page-link" %>
+            <% end %>
+          </li>
+        <% end %>
+
+        <li class="page-item <%= 'disabled' if @current_page == @total_pages %>">
+          <% if @current_page == @total_pages %>
+            <span class="page-link">Proximo</span>
+          <% else %>
+            <%= link_to "Proximo", habits_path(@pagination_params.merge(page: @current_page + 1)), class: "page-link" %>
+          <% end %>
+        </li>
+      </ul>
+    </nav>
+  <% end %>
+<% else %>
+  <section class="empty-state surface-card">
+    <% if filters_active %>
+      <h3 class="h5 mb-2">Nenhum hábito encontrado</h3>
+      <p class="text-muted mb-3">Ajuste os filtros de categoria, prioridade ou status para ampliar os resultados.</p>
+      <%= link_to "Limpar filtros", habits_path, class: "btn btn-outline-secondary px-4" %>
+    <% else %>
+      <h3 class="h5 mb-2">Você ainda não criou hábitos</h3>
+      <p class="text-muted mb-3">Crie seu primeiro hábito para começar a acompanhar suas metas.</p>
+      <%= link_to "Criar primeiro hábito", new_habit_path, class: "btn btn-primary px-4" %>
+    <% end %>
+  </section>
+<% end %>

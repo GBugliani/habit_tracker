@@ -1,0 +1,66 @@
+<section class="auth-login">
+  <div class="auth-login__glow auth-login__glow--a" aria-hidden="true"></div>
+  <div class="auth-login__glow auth-login__glow--b" aria-hidden="true"></div>
+
+  <div class="auth-login__panel auth-login__panel--story surface-card">
+    <p class="auth-kicker">Nova conta</p>
+    <h1 class="auth-title">Comece sua rotina com foco e constancia.</h1>
+    <p class="auth-subtitle">
+      Crie sua conta para organizar habitos diarios, acompanhar o progresso e manter consistencia ao longo das semanas.
+    </p>
+
+    <ul class="auth-points">
+      <li>Cadastro rapido em poucos segundos</li>
+      <li>Visual claro para acompanhar evolucao</li>
+      <li>Experiencia simples e sem distracoes</li>
+    </ul>
+  </div>
+
+  <div class="auth-login__panel auth-login__panel--form surface-card">
+    <div class="auth-form-head">
+      <h2>Criar nova conta</h2>
+      <p>Preencha os dados para comecar.</p>
+    </div>
+
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "auth-form" }) do |f| %>
+      <%= render "devise/shared/error_messages", resource: resource %>
+
+      <div class="mb-3">
+        <%= f.label :name, "Nome", class: "form-label auth-label" %>
+        <%= f.text_field :name, autocomplete: "name", class: "form-control auth-input", placeholder: "Seu nome" %>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :age, "Idade", class: "form-label auth-label" %>
+        <%= f.number_field :age, min: 10, max: 120, class: "form-control auth-input", placeholder: "Sua idade" %>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :email, "E-mail", class: "form-label auth-label" %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control auth-input", placeholder: "voce@exemplo.com" %>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :password, "Senha", class: "form-label auth-label" %>
+        <%= f.password_field :password, autocomplete: "new-password", class: "form-control auth-input", placeholder: "Crie uma senha" %>
+        <% if @minimum_password_length %>
+          <div class="auth-hint mt-1">Minimo de <%= @minimum_password_length %> caracteres.</div>
+        <% end %>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :password_confirmation, "Confirmar senha", class: "form-label auth-label" %>
+        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control auth-input", placeholder: "Repita sua senha" %>
+      </div>
+
+      <%= f.submit "Criar conta", class: "btn auth-submit w-100" %>
+    <% end %>
+
+    <div class="auth-links">
+      <%= link_to "Ja tenho conta", new_session_path(resource_name) %>
+      <% if devise_mapping.recoverable? %>
+        <%= link_to "Esqueci minha senha", new_password_path(resource_name) %>
+      <% end %>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,43 @@
+<section class="auth-login">
+  <div class="auth-login__glow auth-login__glow--a" aria-hidden="true"></div>
+  <div class="auth-login__glow auth-login__glow--b" aria-hidden="true"></div>
+
+  <div class="auth-login__panel auth-login__panel--story surface-card">
+    <p class="auth-kicker">Recuperacao de acesso</p>
+    <h1 class="auth-title">Redefina sua senha com seguranca.</h1>
+    <p class="auth-subtitle">
+      Informe seu e-mail e enviaremos as instrucoes para voce recuperar o acesso em poucos passos.
+    </p>
+
+    <ul class="auth-points">
+      <li>Processo rapido e direto</li>
+      <li>Link seguro enviado por e-mail</li>
+      <li>Volte a acompanhar seus habitos sem perder ritmo</li>
+    </ul>
+  </div>
+
+  <div class="auth-login__panel auth-login__panel--form surface-card">
+    <div class="auth-form-head">
+      <h2>Esqueci minha senha</h2>
+      <p>Digite seu e-mail para receber as instrucoes de redefinicao.</p>
+    </div>
+
+    <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post, class: "auth-form" }) do |f| %>
+      <%= render "devise/shared/error_messages", resource: resource %>
+
+      <div class="mb-3">
+        <%= f.label :email, "E-mail", class: "form-label auth-label" %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control auth-input", placeholder: "voce@exemplo.com" %>
+      </div>
+
+      <%= f.submit "Enviar instrucoes", class: "btn auth-submit w-100" %>
+    <% end %>
+
+    <div class="auth-links">
+      <%= link_to "Voltar para login", new_session_path(resource_name) %>
+      <% if devise_mapping.registerable? %>
+        <%= link_to "Criar nova conta", new_registration_path(resource_name) %>
+      <% end %>
+    </div>
+  </div>
+</section>

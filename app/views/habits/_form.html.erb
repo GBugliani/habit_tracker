@@ -1,0 +1,61 @@
+<div class="surface-card form-shell">
+  <%= form_with model: habit, class: "w-100" do |f| %>
+    <% if habit.errors.any? %>
+      <div class="alert alert-danger border-0">
+        <p class="mb-2"><strong>Não foi possível salvar o hábito:</strong></p>
+        <ul class="mb-0">
+          <% habit.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="mb-3">
+      <%= f.label :name, "Nome", class: "form-label fw-semibold" %>
+      <%= f.text_field :name, class: "form-control form-control-lg", placeholder: "Ex: Ler 20 minutos" %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :description, "Descrição", class: "form-label fw-semibold" %>
+      <%= f.text_area :description, class: "form-control", rows: 4, placeholder: "Detalhes que ajudam você a manter consistência" %>
+    </div>
+
+    <div class="row g-3 mb-3">
+      <div class="col-12 col-md-6">
+        <%= f.label :category, "Categoria", class: "form-label fw-semibold" %>
+        <%= f.text_field :category, class: "form-control", placeholder: "Ex: Saude, Estudos, Trabalho" %>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <%= f.label :frequency_per_week, "Frequencia semanal", class: "form-label fw-semibold" %>
+        <%= f.number_field :frequency_per_week, class: "form-control", min: 1, max: 7, step: 1 %>
+      </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+      <div class="col-12 col-md-6">
+        <%= f.label :priority, "Prioridade", class: "form-label fw-semibold" %>
+        <%= f.select :priority,
+            Habit::PRIORITIES.map { |value| [value.capitalize, value] },
+            {},
+            class: "form-select" %>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <%= f.label :reminder_time, "Lembrete", class: "form-label fw-semibold" %>
+        <%= f.time_field :reminder_time, class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="form-check mb-4">
+      <%= f.check_box :active, class: "form-check-input" %>
+      <%= f.label :active, "Habito ativo", class: "form-check-label" %>
+    </div>
+
+    <div class="form-actions">
+      <%= f.submit "Salvar", class: "btn btn-primary px-4" %>
+      <%= link_to "Cancelar", habits_path, class: "btn btn-outline-secondary px-4" %>
+    </div>
+  <% end %>
+</div>

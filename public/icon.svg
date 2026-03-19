@@ -1,0 +1,17 @@
+<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Habit Tracker icon">
+  <defs>
+    <linearGradient id="bg" x1="32" y1="24" x2="224" y2="232" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0B3D2E"/>
+      <stop offset="1" stop-color="#2F8C67"/>
+    </linearGradient>
+    <linearGradient id="ring" x1="72" y1="68" x2="186" y2="186" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#D9F6E6"/>
+      <stop offset="1" stop-color="#F7F4EC"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="16" y="16" width="224" height="224" rx="56" fill="url(#bg)"/>
+  <circle cx="128" cy="128" r="54" fill="none" stroke="url(#ring)" stroke-width="20" stroke-linecap="round" stroke-dasharray="300 42" transform="rotate(-38 128 128)"/>
+  <path d="M98 130 L120 152 L162 108" fill="none" stroke="#F7F4EC" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="187" cy="94" r="9" fill="#F7F4EC"/>
+</svg>

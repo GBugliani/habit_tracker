@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  name: Ler
+  description: Leitura diaria
+  category: Estudos
+  frequency_per_week: 5
+  priority: media
+  active: true
+
+two:
+  user: two
+  name: Caminhar
+  description: Caminhada matinal
+  category: Saude
+  frequency_per_week: 7
+  priority: alta
+  active: true

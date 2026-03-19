@@ -1,0 +1,87 @@
+<section class="surface-card habit-detail">
+  <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-3">
+    <div>
+      <h2 class="mb-1"><%= @habit.name %></h2>
+      <p class="text-muted mb-2"><%= @habit.description.presence || "Sem descrição cadastrada." %></p>
+      <span class="streak-pill">Sequência: <%= @habit.streak %> dias</span>
+
+      <dl class="habit-info-grid mt-3 mb-0">
+        <div>
+          <dt>Categoria</dt>
+          <dd><%= @habit.category.presence || "Sem categoria" %></dd>
+        </div>
+        <div>
+          <dt>Frequencia</dt>
+          <dd><%= @habit.frequency_per_week %>x por semana</dd>
+        </div>
+        <div>
+          <dt>Prioridade</dt>
+          <dd><%= @habit.priority_label %></dd>
+        </div>
+        <div>
+          <dt>Lembrete</dt>
+          <dd><%= @habit.reminder_time_label %></dd>
+        </div>
+        <div>
+          <dt>Status</dt>
+          <dd><%= @habit.active? ? "Ativo" : "Pausado" %></dd>
+        </div>
+      </dl>
+    </div>
+
+    <div class="action-row">
+      <% if @habit.completed_today? %>
+        <% completion = @habit.completions.find_by(completed_on: Date.today) %>
+        <%= button_to "Desfazer hoje", habit_completion_path(@habit, completion),
+            method: :delete,
+            class: "btn btn-warning",
+            form: { class: "d-inline-block m-0" } %>
+      <% else %>
+        <%= button_to "Concluir hoje", habit_completions_path(@habit),
+            method: :post,
+            class: "btn btn-success",
+            form: { class: "d-inline-block m-0" } %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="action-row mt-3">
+    <%= link_to "Editar", edit_habit_path(@habit), class: "btn btn-outline-primary" %>
+    <%= button_to "Excluir", @habit, method: :delete,
+        data: { turbo_confirm: "Tem certeza?" },
+        class: "btn btn-outline-danger",
+        form: { class: "d-inline-block m-0" } %>
+  </div>
+</section>
+
+<section class="mt-4 surface-card habit-history">
+  <div class="habit-section-head">
+    <h5 class="m-0">Historico recente</h5>
+    <small class="text-muted">Ultimas 10 conclusoes</small>
+  </div>
+
+  <ul class="list-group shadow-sm rounded-3 overflow-hidden">
+    <% @habit.completions.order(completed_on: :desc).limit(10).each do |c| %>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <span><%= c.completed_on.strftime("%d/%m/%Y") %></span>
+        <span class="badge text-bg-light">feito</span>
+      </li>
+    <% end %>
+  </ul>
+</section>
+
+<section class="mt-4 surface-card habit-calendar-wrap">
+  <div class="habit-section-head">
+    <h5 class="m-0">Calendario</h5>
+    <small class="text-muted">Visao mensal de consistencia</small>
+  </div>
+
+  <%= month_calendar events: @completions, attribute: :completed_on do |date, completions| %>
+    <div class="calendar-cell <%= completions.any? ? 'calendar-cell--done' : '' %>">
+      <span class="calendar-cell__day"><%= date.day %></span>
+      <% if completions.any? %>
+        <span class="calendar-cell__status">feito</span>
+      <% end %>
+    </div>
+  <% end %>
+</section>
